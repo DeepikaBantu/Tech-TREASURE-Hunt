@@ -19,19 +19,6 @@ RESULTS_FIELDS = ["timestamp", "team_name", "score", "correct", "skipped", "wron
 FULL_TITLE = f"{CONFIG['game_title']} — {CONFIG['event_name']}"
 
 # --------------------------------------------------------------------------
-# CLUES — a short, always-visible nudge shown under every question, kept
-# separate from the existing optional Hint (which costs points). Purely
-# additive: does not touch scoring, validation, or any other game logic.
-# --------------------------------------------------------------------------
-CLUES = [
-    "This structure never forgets what it saw last — think last-in, first-out.",
-    "Add up only the values that genuinely cross the line, not the ones sitting on it.",
-    "Third floor from the ground — where routers live and packets find their way.",
-    "Only departments whose average genuinely clears the bar make the list.",
-    "Every term here is just the sum of the two that came right before it.",
-]
-
-# --------------------------------------------------------------------------
 # GLOBAL STYLE
 # --------------------------------------------------------------------------
 st.markdown(
@@ -208,30 +195,6 @@ st.markdown(
             color: #b9e6ff !important;
             margin-bottom: 1.2rem;
             display: block;
-        }
-
-        /* ---------- Clue card (always visible, distinct from Hint) ---- */
-        .clue-card {
-            background: rgba(255, 196, 79, 0.07);
-            border: 1.5px solid rgba(255, 196, 79, 0.45);
-            border-radius: 16px;
-            padding: 1rem 1.3rem;
-            margin: 0.2rem 0 1.4rem 0;
-        }
-        .clue-label {
-            display: flex;
-            align-items: center;
-            gap: 0.45rem;
-            color: #ffd98a !important;
-            font-weight: 900;
-            letter-spacing: 0.14em;
-            font-size: 1rem;
-            margin-bottom: 0.4rem;
-        }
-        .clue-text {
-            color: #fff2d9 !important;
-            font-size: 1.05rem;
-            line-height: 1.6;
         }
 
         /* ---------- Feedback banners ---------- */
@@ -553,17 +516,6 @@ def render_game():
         if q["snippet"]:
             snippet_html = q["snippet"].replace("\n", "<br>")
             st.markdown(f'<div class="qsnippet">{snippet_html}</div>', unsafe_allow_html=True)
-
-        # ---- CLUE (always visible, distinct from the optional Hint) ----
-        clue_text = CLUES[q_index] if q_index < len(CLUES) else ""
-        if clue_text:
-            st.markdown(
-                f'<div class="clue-card">'
-                f'<div class="clue-label">💡 CLUE</div>'
-                f'<div class="clue-text">{clue_text}</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
 
         if not st.session_state.answer_locked:
             answer_key = f"answer_input_{q_index}"
